@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a fully-featured **Grocery Shopping App** built using **Flutter** with **API integration**. The app provides users with a smooth and intuitive shopping experience, allowing them to create accounts, manage their profiles, browse products, add/remove items to/from the cart and favorites, and dynamically interact with data via real-time API calls.
+This is a fully featured Grocery Shopping app built using Flutter with API integration. The app provides users with a smooth and intuitive shopping experience, allowing them to create accounts, manage their profiles, browse products, add/remove items to/from the cart and favorites, and dynamically interact with data via real-time API calls.
 
 ## Features
 
@@ -28,7 +28,7 @@ This is a fully-featured **Grocery Shopping App** built using **Flutter** with *
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Youssef18118/Groceries-app/
+   git clone https://github.com/Youssef18118/Groceries-app.git
    cd Groceries-app
    ```
 2. **Install dependencies**:
@@ -36,6 +36,6 @@ This is a fully-featured **Grocery Shopping App** built using **Flutter** with *
    flutter pub get
     ```
 3. **Run the app**:
-   ```bash
-  flutter run
-   ```    
+    ```bash
+    flutter run
+    ```
