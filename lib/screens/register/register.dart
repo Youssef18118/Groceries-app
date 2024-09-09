@@ -155,7 +155,7 @@ class register extends StatelessWidget {
                         ),
                         InkWell(
                             onTap: () {
-                              Get.to(const Login());
+                              Get.to(() => const Login());
                             },
                             child: const Text(
                               "Login",

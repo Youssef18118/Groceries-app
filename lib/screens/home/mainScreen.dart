@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
                   cubit.BottomScreenChanged(index, false);
                 },
                 children: [
-                  Home(cubit, width, height),
+                  HomePage(cubit: cubit, width: width, height: height),
                   FavouritesScreen(
                     cubit: cubit,
                   ),

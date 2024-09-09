@@ -5,7 +5,7 @@ import 'package:groceries_app/screens/home/cubit/home_cubit.dart';
 class FavouritesScreen extends StatelessWidget {
   final HomeCubit cubit;
 
-  FavouritesScreen({required this.cubit});
+  const FavouritesScreen({required this.cubit});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class FavouritesScreen extends StatelessWidget {
         cubit.Pmodel.data?.data?.where((item) => item.inFavorites!).toList() ?? [];
 
     if (likedItems.isEmpty) {
-      return Center(
+      return const Center(
         child: Text(
           'No favourites yet',
           style: TextStyle(fontSize: 18, color: Colors.grey),
@@ -26,12 +26,12 @@ class FavouritesScreen extends StatelessWidget {
     }
 
     return ListView.builder(
-      padding: EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
       itemCount: likedItems.length,
       itemBuilder: (context, index) {
         final item = likedItems[index];
         return Container(
-          margin: EdgeInsets.only(bottom: 15),
+          margin: const EdgeInsets.only(bottom: 15),
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(20),
@@ -43,7 +43,7 @@ class FavouritesScreen extends StatelessWidget {
                 width: double.infinity,
                 height: height * 0.2,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                   child: Image.network(
                     item.image ?? '',
                     fit: BoxFit.cover,
@@ -58,23 +58,23 @@ class FavouritesScreen extends StatelessWidget {
                     Text(
                       item.name ?? '',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Text(
                           "\$${item.price ?? 0}",
-                          style: TextStyle(fontSize: 16, color: Colors.green),
+                          style: const TextStyle(fontSize: 16, color: Colors.green),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         if (item.oldPrice != null &&
                             item.oldPrice! > item.price!)
                           Text(
                             "\$${item.oldPrice ?? 0}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
@@ -82,25 +82,38 @@ class FavouritesScreen extends StatelessWidget {
                           ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     BlocBuilder<HomeCubit, HomeState>(
                       builder: (context, state) {
-                        return Row(children: [
-                          Container(
-                            width: width * 0.6,
-                            child: ElevButton(
-                                child: Text("Add to Cart"),
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: ElevButton(
+                                child: const Text("Add to Cart"),
                                 is_Delete: false,
-                                index: index),
-                          ),
-                          Spacer(),
-                          ElevButton(
-                              child: Icon(Icons.delete),
-                              is_Delete: true,
-                              index: index),
-                        ]);
+                                index: index,
+                                likedItems: likedItems,
+                              ),
+                            ),
+                            const SizedBox(width: 10),  
+                            ElevatedButton(
+                              onPressed: () {
+                                cubit.deleteHeart(index);  
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red[300],  
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Icon(Icons.delete),
+                            ),
+                          ],
+                        );
                       },
                     ),
+
+
                   ],
                 ),
               ),
@@ -111,33 +124,30 @@ class FavouritesScreen extends StatelessWidget {
     );
   }
 
-  ElevatedButton ElevButton(
-      {required Widget child, required bool is_Delete, required int index}) {
+  ElevatedButton ElevButton({
+    required Widget child,
+    required bool is_Delete,  
+    required int index,
+    required var likedItems,
+  }) {
+    final isInCart = likedItems[index].inCart ?? false;  
+
     return ElevatedButton(
       onPressed: () {
-        if (is_Delete) {
-          cubit.deleteHeart(index);
-        }
+        cubit.addProductToCart(likedItems[index].id ?? 0);  
       },
-      child: child,
       style: ElevatedButton.styleFrom(
-        backgroundColor: is_Delete
-            ? Colors.red[300]
-            : Colors.green[300], // Use backgroundColor instead of primary
+        backgroundColor: isInCart ? Colors.red[300] : Colors.green[300],  
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
       ),
+      child: isInCart ? const Text('Remove from Cart') : child,
     );
+
+
+
+
   }
 }
 
-String formatNumber(double number) {
-  if (number >= 1000 && number < 1000000) {
-    return '${(number / 1000).toStringAsFixed(1)}k';
-  } else if (number >= 1000000) {
-    return '${(number / 1000000).toStringAsFixed(1)}M';
-  } else {
-    return number.toStringAsFixed(0);
-  }
-}

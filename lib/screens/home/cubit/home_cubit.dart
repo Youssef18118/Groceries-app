@@ -23,6 +23,8 @@ class HomeCubit extends Cubit<HomeState> {
   bool isLiked = false;
   bool addedToCart = false;
   List filteredProducts = [];  
+  bool isSnackBarShown = false;
+  bool First_time = true;
 
 
   void BottomScreenChanged(int index, bool isBottomBarClick) {
@@ -107,13 +109,18 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeScreenChangedState(0)); 
   }
 
-  void changeLike(int index) {
-    final product = Pmodel.data?.data?[index];
-    if (product != null) {
-      product.inFavorites = !product.inFavorites!;  
+  void changeLike(int productId) {
+    final productIndex = Pmodel.data?.data?.indexWhere((product) => product.id == productId);
+
+    if (productIndex != null && productIndex >= 0) {
+      final product = Pmodel.data?.data?[productIndex];
+      product!.inFavorites = !product.inFavorites!;  // Toggle favorite status
       emit(HomeHeartChanged());
+    } else {
+      print('Product not found for id: $productId');
     }
   }
+
 
 
   void deleteHeart(int index) {
